@@ -32,17 +32,26 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-  }, {});
+  },
+  {});
+
+  User.prototype
+    .correctPassword = async (candidatPass, userPass) => bcrypt.compare(candidatPass, userPass);
+
   // User.associate = function (models) {
   //   // associations can be defined here
   // };
 
   User.beforeSave(async (user) => {
+    // eslint-disable-next-line no-param-reassign
+    user.password = await bcrypt.hash(user.password, 12);
+  });
+
+  User.beforeUpdate(async (user) => {
     if (user.changed('password')) {
       // eslint-disable-next-line no-param-reassign
       user.password = await bcrypt.hash(user.password, 12);
     }
   });
-
   return User;
 };
