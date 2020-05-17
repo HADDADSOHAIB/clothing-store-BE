@@ -30,8 +30,6 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
-// db.Category.belongsToMany(db.Product, { through: 'ProductCategory' });
-// db.Product.belongsToMany(db.Category, { through: 'ProductCategory' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

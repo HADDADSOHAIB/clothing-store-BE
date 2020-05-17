@@ -1,7 +1,10 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
 const db = require('./models/index');
+
+dotenv.config({ path: './config.env' });
 
 const app = express();
 
