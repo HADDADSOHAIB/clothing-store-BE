@@ -15,6 +15,7 @@ exports.createReview = catchAsync(async (req, res, next) => {
     rating: req.body.rating,
   });
 
+  await product.updateRatings();
   return res.status(201).json({
     message: 'success',
     data: review,

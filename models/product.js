@@ -41,5 +41,16 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  // eslint-disable-next-line func-names
+  Product.prototype.updateRatings = async function () {
+    const avg = await sequelize.models.ProductReview.findAll({
+      where: { productId: this.id },
+      attributes: [[sequelize.fn('avg', sequelize.col('rating')), 'rating']],
+    });
+
+    this.rating = avg[0].rating;
+    this.save();
+  };
+
   return Product;
 };

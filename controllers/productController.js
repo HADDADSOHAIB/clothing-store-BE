@@ -37,6 +37,7 @@ exports.addQuantity = catchAsync(async (req, res, next) => {
   });
 });
 
+
 exports.createProduct = catchAsync(async (req, res) => {
   const product = await db.Product.create({
     name: req.body.name,
