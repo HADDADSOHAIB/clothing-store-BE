@@ -12,7 +12,7 @@ exports.getProducts = catchAsync(async (req, res) => {
 });
 
 exports.getProduct = catchAsync(async (req, res, next) => {
-  const product = await db.Product.findByPk(req.params.id, { include: ['categories'] });
+  const product = await db.Product.findByPk(req.params.id, { include: ['categories', 'reviews'] });
   if (!product) {
     return next(new AppError('Record not found', 404));
   }

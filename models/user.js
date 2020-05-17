@@ -42,6 +42,11 @@ module.exports = (sequelize, DataTypes) => {
       as: 'reviews',
       foreignKey: 'userId',
     });
+
+    User.hasOne(models.Cart, {
+      as: 'cart',
+      foreignKey: 'userId',
+    });
   };
 
   User.beforeSave(async (user) => {

@@ -15,8 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     rating: {
       type: DataTypes.DECIMAL,
       allowNull: false,
-      max: 5,
-      min: 0,
+      validate: {
+        max: 5,
+        min: 0,
+      },
     },
     quantity: {
       type: DataTypes.INTEGER,
@@ -38,6 +40,10 @@ module.exports = (sequelize, DataTypes) => {
     Product.hasMany(models.ProductReview, {
       as: 'reviews',
       foreignKey: 'productId',
+    });
+    Product.hasMany(models.CartItem, {
+      foreignKey: 'productId',
+      as: 'cartItems',
     });
   };
 
