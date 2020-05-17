@@ -33,6 +33,7 @@ exports.signup = catchAsync(async (req, res) => {
   });
 
   const token = signToken(newUser.id);
+  await db.Cart.create({ userId: newUser.id });
 
   return res.status(201).json({
     status: 'success',
