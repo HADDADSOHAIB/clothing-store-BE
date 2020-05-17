@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs');
-// const crypto=require('crypto');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -38,9 +37,12 @@ module.exports = (sequelize, DataTypes) => {
   User.prototype
     .correctPassword = async (candidatPass, userPass) => bcrypt.compare(candidatPass, userPass);
 
-  // User.associate = function (models) {
-  //   // associations can be defined here
-  // };
+  User.associate = function (models) {
+    User.hasMany(models.ProductReview, {
+      as: 'reviews',
+      foreignKey: 'userId',
+    });
+  };
 
   User.beforeSave(async (user) => {
     // eslint-disable-next-line no-param-reassign

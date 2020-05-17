@@ -28,7 +28,9 @@ exports.addQuantity = catchAsync(async (req, res, next) => {
     return next(new AppError('Record not found', 404));
   }
 
-  
+  product.quantity += req.body.quantity;
+  await product.save();
+
   return res.status(200).json({
     message: 'success',
     data: product,

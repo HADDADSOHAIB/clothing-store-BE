@@ -1,9 +1,18 @@
 const express = require('express');
 const productController = require('../controllers/productController');
+const reviewController = require('../controllers/reviewController');
 
 const router = express.Router();
 
-router.get('/:id', productController.getProduct);
+router
+  .route('/:id/quantity')
+  .post(productController.addQuantity);
+router
+  .route('/:id/reviews')
+  .post(reviewController.createReview);
+router
+  .route('/:id')
+  .get(productController.getProduct);
 router
   .route('/')
   .get(productController.getProducts)
