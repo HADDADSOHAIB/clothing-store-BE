@@ -14,12 +14,14 @@ const productRouter = require('./routes/productRouter');
 const categoryRouter = require('./routes/categoryRouter');
 const reviewRouter = require('./routes/reviewRouter');
 const cartRouter = require('./routes/cartRouter');
+const cartItemRouter = require('./routes/cartItemRouter');
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/categories', categoryRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/carts', cartRouter);
+app.use('/api/v1/cartItems', cartItemRouter);
 
 const port = process.env.PORT || 3000;
 

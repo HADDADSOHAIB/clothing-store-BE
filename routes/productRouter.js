@@ -6,7 +6,7 @@ const router = express.Router();
 
 router
   .route('/:id/quantity')
-  .post(productController.addQuantity);
+  .patch(productController.addQuantity);
 router
   .route('/:id/reviews')
   .post(reviewController.createReview);
