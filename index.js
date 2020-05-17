@@ -11,10 +11,11 @@ app.use(cookieParser());
 
 const userRouter = require('./routes/userRouter');
 const productRouter = require('./routes/productRouter');
+const categoryRouter = require('./routes/categoryRouter');
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
-
+app.use('/api/v1/categories', categoryRouter);
 
 const port = process.env.PORT || 3000;
 

@@ -24,8 +24,18 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
 
-  // Product.associate = function(models) {
-  //   // associations can be defined here
-  // };
+  // eslint-disable-next-line func-names
+  Product.associate = function (models) {
+    Product.belongsToMany(models.Category, {
+      as: 'categories',
+      through: 'ProductCategory',
+      foreignKey: 'productId',
+      otherKey: 'categoryId',
+    });
+    Product.hasMany(models.ProductCategory, {
+      foreignKey: 'productId',
+    });
+  };
+
   return Product;
 };
