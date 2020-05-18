@@ -1,10 +1,8 @@
-// const catchAsync=require('./../utils/catchAsync');
 const jwt = require('jsonwebtoken');
+const { promisify } = require('util');
 const db = require('../models/index');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-// const AppError=require('./../utils/appError');
-// const {promisify}=require('util');
 // const Email=require('./../utils/email');
 // const crypto=require('crypto');
 
@@ -64,29 +62,37 @@ exports.login = catchAsync(async (req, res, next) => {
   });
 });
 
-// exports.protect=catchAsync(async (req,res,next)=>{
-//     let token;
-//     if(req.cookies.token_user) token = req.cookies.token_user;
+exports.protect = catchAsync(async (req, res, next) => {
+  let token;
+  if (req.cookies.token_user) token = req.cookies.token_user;
 
-//     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
-//         token=req.headers.authorization.split(' ')[1];
-//     }
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    [, token] = req.headers.authorization.split(' ');
+  }
 
-//     if(!token){
-//         return next(new AppError('You are not logged in',401));
-//     }
-//     const decoded=await promisify(jwt.verify)(token,process.env.JWT_SECRET);
-//     const freshUser=await User.findById(decoded.id);
-//     if(!freshUser){
-//         return next(new AppError('This account does not exist, login again',401));
-//     }
+  if (!token) {
+    return next(new AppError('You are not logged in', 401));
+  }
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  const freshUser = await db.User.findById(decoded.id);
+  if (!freshUser) {
+    return next(new AppError('This account does not exist, login again', 401));
+  }
 
-//     if(freshUser.changedPasswordAfter(decoded.iat)){
-//         return next(new AppError('User changed password, please login again',401));
-//     };
-//     req.user = freshUser;
-//     next();
-// });
+  if (freshUser.changedPasswordAfter(decoded.iat)) {
+    return next(new AppError('User changed password, please login again', 401));
+  }
+  req.user = freshUser;
+  return next();
+});
+
+exports.restrictTo = (...roles) => catchAsync(async (req, res, next) => {
+  if (!roles.includes(req.user.role)) {
+    return next(new AppError('You do not have permission to perform this action', 403));
+  }
+  return next();
+});
+
 
 // exports.isLoggedIn=catchAsync(async (req,res,next)=>{
 //     let token = req.cookies.token_user;
@@ -110,14 +116,6 @@ exports.login = catchAsync(async (req, res, next) => {
 //     }
 // });
 
-// exports.restrictTo=(...roles)=>{
-//     return catchAsync(async (req,res,next)=>{
-//         if(!roles.includes(req.user.role)){
-//             return next(new AppError('You do not have permission to perform this action',403));
-//         }
-//         next();
-//     });
-// }
 
 // exports.forgotPassword = catchAsync(async (req, res, next)=>{
 //     const user=await User.findOne({email:req.body.email});
