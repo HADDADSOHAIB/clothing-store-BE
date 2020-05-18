@@ -6,11 +6,7 @@ const AppError = require('../utils/appError');
 // const Email=require('./../utils/email');
 // const crypto=require('crypto');
 
-const signToken = (id) => jwt.sign(
-  { id },
-  'my-app-is-good-should-good-that-me-ok',
-  { expiresIn: '30d' },
-);
+const signToken = (id) => jwt.sign({ id }, 'my-app-is-good-should-good-that-me-ok', { expiresIn: '30d' });
 
 exports.signup = catchAsync(async (req, res) => {
   if (req.body.password !== req.body.passwordConfirmation) {
@@ -26,7 +22,7 @@ exports.signup = catchAsync(async (req, res) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     phoneNumber: req.body.phoneNumber,
-    role: req.body.role,
+    role: 'user',
     password: req.body.password,
   });
 
@@ -93,7 +89,6 @@ exports.restrictTo = (...roles) => catchAsync(async (req, res, next) => {
   return next();
 });
 
-
 // exports.isLoggedIn=catchAsync(async (req,res,next)=>{
 //     let token = req.cookies.token_user;
 
@@ -115,7 +110,6 @@ exports.restrictTo = (...roles) => catchAsync(async (req, res, next) => {
 //        res.redirect(401,`${req.protocol}://${req.get('host')}/`);
 //     }
 // });
-
 
 // exports.forgotPassword = catchAsync(async (req, res, next)=>{
 //     const user=await User.findOne({email:req.body.email});

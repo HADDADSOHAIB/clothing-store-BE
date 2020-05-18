@@ -5,13 +5,33 @@ module.exports = (sequelize, DataTypes) => {
     userEmail: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
-      isEmail: true,
+      validate: {
+        isEmail: true,
+        notNull: true,
+        isUnique(value) {
+          return User.findOne({ where: { userEmail: value } })
+            .then((res) => {
+              if (res) {
+                throw new Error('Email already exist');
+              }
+            });
+        },
+      },
     },
     userName: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      validate: {
+        notNull: true,
+        isUnique(value) {
+          return User.findOne({ where: { userName: value } })
+            .then((res) => {
+              if (res) {
+                throw new Error('User name already exist');
+              }
+            });
+        },
+      },
     },
     firstName: {
       type: DataTypes.STRING,
@@ -26,10 +46,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: 'user',
+      validate: {
+        notNull: true,
+      },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: true,
+        len: [6, 30],
+      },
     },
   },
   {});
