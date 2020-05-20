@@ -89,6 +89,27 @@ exports.restrictTo = (...roles) => catchAsync(async (req, res, next) => {
   return next();
 });
 
+exports.getUserByToken = catchAsync(async (req, res, next) => {
+  const { token } = req.body;
+
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  const freshUser = await db.User.findByPk(decoded.id);
+
+  if (!freshUser) {
+    return next(new AppError('This account does not exist, login again', 401));
+  }
+
+  // if (freshUser.changedPasswordAfter(decoded.iat)) {
+  //   return next(new AppError('User changed password, please login again', 401));
+  // }
+
+  return res.status(200).json({
+    status: 'success',
+    data: freshUser,
+  });
+});
+
+
 // exports.isLoggedIn=catchAsync(async (req,res,next)=>{
 //     let token = req.cookies.token_user;
 

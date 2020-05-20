@@ -3,6 +3,10 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: true,
+        notEmpty: true,
+      },
     },
   }, {});
   // eslint-disable-next-line func-names
@@ -18,13 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  Category.beforeSave((category) => {
+  Category.beforeValidate((category) => {
     // eslint-disable-next-line no-param-reassign
-    category.name = category.name.toLowerCase();
+    category.name = category.name.toLowerCase().trim();
   });
-  Category.beforeUpdate((category) => {
-    // eslint-disable-next-line no-param-reassign
-    category.name = category.name.toLowerCase();
-  });
+
   return Category;
 };
