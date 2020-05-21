@@ -37,7 +37,6 @@ exports.addQuantity = catchAsync(async (req, res, next) => {
   });
 });
 
-
 exports.createProduct = catchAsync(async (req, res) => {
   const product = await db.Product.create({
     name: req.body.name,
@@ -51,7 +50,7 @@ exports.createProduct = catchAsync(async (req, res) => {
 
   if (categories) {
     categories.forEach(async (el) => {
-      await db.ProductCategory.create({ productId: product.id, categoryId: el });
+      await db.ProductCategory.create({ productId: product.id, categoryId: el.id });
     });
   }
 

@@ -8,10 +8,10 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-  }, {});
+  });
   // eslint-disable-next-line func-names
   Category.associate = function (models) {
-    Category.belongsToMany(models.Category, {
+    Category.belongsToMany(models.Product, {
       through: 'ProductCategory',
       as: 'products',
       foreignKey: 'categoryId',

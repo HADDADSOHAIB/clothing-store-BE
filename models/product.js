@@ -1,9 +1,12 @@
-
+/* eslint-disable no-param-reassign */
 module.exports = (sequelize, DataTypes) => {
   const Product = sequelize.define('Product', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: true,
+      },
     },
     description: {
       type: DataTypes.TEXT,
@@ -11,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     price: {
       type: DataTypes.DECIMAL,
       allowNull: false,
+      validate: {
+        notNull: true,
+        isNumeric: true,
+      },
     },
     rating: {
       type: DataTypes.DECIMAL,
@@ -18,13 +25,17 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         max: 5,
         min: 0,
+        notNull: true,
       },
     },
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      validate: {
+        notNull: true,
+      },
     },
-  }, {});
+  });
 
   // eslint-disable-next-line func-names
   Product.associate = function (models) {
@@ -57,6 +68,13 @@ module.exports = (sequelize, DataTypes) => {
     this.rating = avg[0].rating;
     this.save();
   };
+
+  Product.beforeValidate((product) => {
+    product.name = product.name.toLowerCase().trim();
+    if (product.description) {
+      product.description = product.description.toLowerCase().trim();
+    }
+  });
 
   return Product;
 };

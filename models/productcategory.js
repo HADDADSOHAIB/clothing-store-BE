@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-  }, {});
+  });
   // eslint-disable-next-line func-names
   ProductCategory.associate = function (models) {
     ProductCategory.belongsTo(models.Product, { foreignKey: 'productId' });
