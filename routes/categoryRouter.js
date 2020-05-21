@@ -9,5 +9,6 @@ router.route('/')
   .get(categoryController.getAllCategory);
 router.route('/:id')
   .get(categoryController.getCategory)
-  .patch(categoryController.updateCategory);
+  .patch(categoryController.updateCategory)
+  .delete(categoryController.deleteCategory);
 module.exports = router;

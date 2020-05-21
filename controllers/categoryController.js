@@ -22,16 +22,27 @@ exports.getCategory = catchAsync(async (req, res, next) => {
 });
 
 exports.updateCategory = catchAsync(async (req, res, next) => {
-  const category = await db.Category.update(
+  const result = await db.Category.update(
     { name: req.body.name },
-    { where: { id: req.params.id }, returning: true, plain: true },
+    { where: { id: req.params.id } },
   );
 
-  if (!category) return next(new AppError('Record not found', 404));
+  if (!result[0]) return next(new AppError('Record not found', 404));
 
   return res.status(200).json({
     message: 'success',
-    data: category,
+    data: result,
+  });
+});
+
+exports.deleteCategory = catchAsync(async (req, res, next) => {
+  const result = await db.Category.destroy({ where: { id: req.params.id } });
+
+  if (!result) return next(new AppError('Record not found', 404));
+
+  return res.status(200).json({
+    message: 'success',
+    data: result,
   });
 });
 
