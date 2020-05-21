@@ -3,7 +3,14 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 exports.getProducts = catchAsync(async (req, res) => {
-  const products = await db.Product.findAll();
+  const { page, size } = req.query;
+  const queryObj = {};
+  if (page && size) {
+    queryObj.offset = (parseInt(page, 10) - 1) * parseInt(size, 10);
+    queryObj.limit = parseInt(size, 10);
+  }
+
+  const products = await db.Product.findAll(queryObj);
 
   return res.status(200).json({
     message: 'success',
