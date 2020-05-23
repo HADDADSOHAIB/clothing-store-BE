@@ -7,7 +7,7 @@ const { Op } = db.Sequelize;
 
 exports.getProducts = catchAsync(async (req, res) => {
   console.log(req.query);
-  const { page, size, order, dir, categories, prices, priceu, priced } = req.query;
+  const { page, size, order, dir, categories, priceu, priced } = req.query;
 
   const queryObj = {};
   if (page && size) {
@@ -29,11 +29,11 @@ exports.getProducts = catchAsync(async (req, res) => {
       },
     ];
   }
-  if (prices || priced || priceu) {
-    if (prices) {
+  if (priced || priceu) {
+    if (priced && priceu) {
       queryObj.where = {
         price: {
-          [Op.between]: [parseInt(prices.split(',')[0], 10), parseInt(prices.split(',')[1], 10)],
+          [Op.between]: [parseInt(priced, 10), parseInt(priceu, 10)],
         },
       };
     } else if (priceu) {
@@ -51,6 +51,7 @@ exports.getProducts = catchAsync(async (req, res) => {
     }
   }
   console.log(queryObj);
+
   const products = await db.Product.findAll(queryObj);
 
   return res.status(200).json({
