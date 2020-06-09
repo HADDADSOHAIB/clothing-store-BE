@@ -22,6 +22,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     quantity: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 0,
+      },
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   }, {});
   // eslint-disable-next-line func-names

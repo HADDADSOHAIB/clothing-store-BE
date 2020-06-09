@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable object-curly-newline */
 const db = require('../models/index');
 const catchAsync = require('../utils/catchAsync');
@@ -57,6 +58,17 @@ exports.getProducts = catchAsync(async (req, res) => {
   return res.status(200).json({
     message: 'success',
     data: products,
+  });
+});
+
+exports.productCount = catchAsync(async (req, res, next) => {
+  const countQuery = await db.Product.findAll({
+    attributes: [[db.sequelize.fn('count', db.sequelize.col('name')), 'count']],
+  });
+
+  return res.status(200).json({
+    message: 'success',
+    data: countQuery[0],
   });
 });
 
