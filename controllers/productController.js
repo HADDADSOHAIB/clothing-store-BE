@@ -71,10 +71,18 @@ exports.productCount = catchAsync(async (req, res, next) => {
 });
 
 exports.getProduct = catchAsync(async (req, res, next) => {
-  const product = await db.Product.findByPk(req.params.id, { include: ['categories', 'reviews'] });
+  const product = await db.Product.findByPk(req.params.id, {
+    include: ['categories', {
+      model: db.ProductReview,
+      as: 'reviews',
+      include: ['user', 'product'],
+    }],
+  });
+
   if (!product) {
     return next(new AppError('Record not found', 404));
   }
+
   return res.status(200).json({
     message: 'success',
     data: product,
