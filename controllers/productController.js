@@ -75,7 +75,7 @@ exports.getProduct = catchAsync(async (req, res, next) => {
     include: ['categories', {
       model: db.ProductReview,
       as: 'reviews',
-      include: ['user', 'product'],
+      include: ['user'],
     }],
   });
 

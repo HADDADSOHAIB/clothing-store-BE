@@ -8,17 +8,18 @@ exports.createReview = catchAsync(async (req, res, next) => {
     return next(new AppError('Record not found', 404));
   }
 
-  const review = await db.ProductReview.create({
-    userId: 12,
+  const { userId, review, rating } = req.body;
+  const newReview = await db.ProductReview.create({
+    userId,
     productId: product.id,
-    review: req.body.review,
-    rating: req.body.rating,
+    review,
+    rating,
   });
 
   await product.updateRatings();
   return res.status(201).json({
     message: 'success',
-    data: review,
+    data: newReview,
   });
 });
 
