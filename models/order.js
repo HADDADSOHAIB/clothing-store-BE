@@ -19,5 +19,15 @@ module.exports = (sequelize, DataTypes) => {
     deliveryConfirmationDate: DataTypes.DATE,
     cancelationDate: DataTypes.DATE,
   }, {});
+  Order.associate = function (models) {
+    Order.belongsTo(models.User, {
+      foreignKey: 'userId',
+      as: 'user',
+    });
+    Order.hasMany(models.OrderItem, {
+      foreignKey: 'orderId',
+      as: 'items',
+    });
+  };
   return Order;
 };
