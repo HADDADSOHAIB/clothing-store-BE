@@ -2,6 +2,7 @@ const db = require('../models/index');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
+// eslint-disable-next-line no-unused-vars
 exports.createOrder = catchAsync(async (req, res, next) => {
   const {
     userId,
@@ -26,7 +27,12 @@ exports.createOrder = catchAsync(async (req, res, next) => {
   });
 
   orderItems.map(async (orderItem) => {
-    const { productId, name, quantity, price } = orderItem;
+    const {
+      productId,
+      name,
+      quantity,
+      price,
+    } = orderItem;
 
     await db.OrderItem.create({
       productId,
@@ -45,11 +51,19 @@ exports.createOrder = catchAsync(async (req, res, next) => {
   });
 });
 
+// eslint-disable-next-line no-unused-vars
 exports.getOrders = catchAsync(async (req, res, next) => {
-  const orders = await db.Order.findAll({
+  const queryObj = {
     include: ['user', 'items'],
     order: [['orderDate', 'DESC']],
-  });
+  };
+
+  const { userId } = req.query;
+  if (userId) {
+    queryObj.where = { userId };
+  }
+
+  const orders = await db.Order.findAll(queryObj);
 
   return res.status(200).json({
     message: 'success',
@@ -92,7 +106,7 @@ exports.updateOrder = catchAsync(async (req, res, next) => {
       deliveryConfirmationDate,
       cancelationDate,
     },
-    { where: { id } }
+    { where: { id } },
   );
 
   if (!result[0]) return next(new AppError('Record not found', 404));

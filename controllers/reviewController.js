@@ -33,3 +33,16 @@ exports.getReview = catchAsync(async (req, res, next) => {
     data: review,
   });
 });
+
+// eslint-disable-next-line no-unused-vars
+exports.getReviews = catchAsync(async (req, res, next) => {
+  const reviews = await db.ProductReview.findAll({
+    include: ['product'],
+    where: { userId: req.user.id },
+  });
+
+  return res.status(200).json({
+    message: 'success',
+    data: reviews,
+  });
+});
