@@ -35,6 +35,17 @@ module.exports = (sequelize, DataTypes) => {
         notNull: true,
       },
     },
+    coverImage: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notNull: true,
+      },
+    },
+    images: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      defaultValue: [],
+    },
   });
 
   // eslint-disable-next-line func-names

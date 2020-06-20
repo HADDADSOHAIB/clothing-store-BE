@@ -4,13 +4,16 @@ const AppError = require('../utils/appError');
 
 exports.createItem = catchAsync(async (req, res, next) => {
   const cart = await db.Cart.findByPk(req.params.id);
+  const product = await db.Product.findByPk(req.body.productId);
 
   if (!cart) return next(new AppError('Cart not found', 404));
+  if (!product) return next(new AppError('Product not found', 404));
 
   const newItem = await db.CartItem.create({
-    productId: req.body.productId,
+    productId: product.id,
     cartId: cart.id,
-    price: req.body.price,
+    price: product.price,
+    name: product.name,
     quantity: 1,
   });
 

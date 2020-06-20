@@ -19,7 +19,9 @@ const categoryRouter = require('./routes/categoryRouter');
 const reviewRouter = require('./routes/reviewRouter');
 const cartRouter = require('./routes/cartRouter');
 const cartItemRouter = require('./routes/cartItemRouter');
+const orderRouter = require('./routes/orderRouter');
 
+app.use('/api/v1/orders', orderRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/categories', categoryRouter);
