@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const CartItem = sequelize.define('CartItem', {
+  const OrderItem = sequelize.define('OrderItem', {
     productId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -8,16 +8,16 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-    cartId: {
+    orderId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Carts',
+        model: 'Orders',
         key: 'id',
       },
     },
-    price: {
-      type: DataTypes.DECIMAL,
+    name: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     quantity: {
@@ -27,15 +27,17 @@ module.exports = (sequelize, DataTypes) => {
         min: 0,
       },
     },
-    name: {
-      type: DataTypes.STRING,
+    price: {
+      type: DataTypes.DECIMAL,
       allowNull: false,
+      validate: {
+        min: 0,
+      },
     },
   }, {});
-  // eslint-disable-next-line func-names
-  CartItem.associate = function (models) {
-    CartItem.belongsTo(models.Product, { foreignKey: 'productId' });
-    CartItem.belongsTo(models.Cart, { foreignKey: 'cartId' });
+  OrderItem.associate = function (models) {
+    OrderItem.belongsTo(models.Product, { foreignKey: 'productId' });
+    OrderItem.belongsTo(models.Order, { foreignKey: 'orderId' });
   };
-  return CartItem;
+  return OrderItem;
 };

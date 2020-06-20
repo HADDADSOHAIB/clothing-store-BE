@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('CartItems', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('OrderItems', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -14,20 +14,24 @@ module.exports = {
         key: 'id',
       },
     },
-    cartId: {
+    orderId: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
-        model: 'Carts',
+        model: 'Orders',
         key: 'id',
       },
     },
-    price: {
-      type: Sequelize.DECIMAL,
+    name: {
+      type: Sequelize.STRING,
       allowNull: false,
     },
     quantity: {
       type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    price: {
+      type: Sequelize.DECIMAL,
       allowNull: false,
     },
     createdAt: {
@@ -39,5 +43,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface) => queryInterface.dropTable('CartItems'),
+  down: (queryInterface) => queryInterface.dropTable('OrderItems'),
 };
