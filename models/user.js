@@ -8,14 +8,6 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isEmail: true,
         notNull: true,
-        isUnique(value) {
-          return User.findOne({ where: { userEmail: value } })
-            .then((res) => {
-              if (res) {
-                throw new Error('Email already exist');
-              }
-            });
-        },
       },
     },
     userName: {
@@ -23,14 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: true,
-        isUnique(value) {
-          return User.findOne({ where: { userName: value } })
-            .then((res) => {
-              if (res) {
-                throw new Error('User name already exist');
-              }
-            });
-        },
       },
     },
     firstName: {

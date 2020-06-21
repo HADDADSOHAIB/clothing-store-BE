@@ -3,17 +3,22 @@ const { promisify } = require('util');
 const db = require('../models/index');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-// const Email=require('./../utils/email');
-// const crypto=require('crypto');
 
 const signToken = (id) => jwt.sign({ id }, 'my-app-is-good-should-good-that-me-ok', { expiresIn: '30d' });
 
-exports.signup = catchAsync(async (req, res) => {
+exports.signup = catchAsync(async (req, res, next) => {
   if (req.body.password !== req.body.passwordConfirmation) {
-    return res.status(400).json({
-      status: 'Failure',
-      message: 'Password confirmation is not a match',
-    });
+    return next(new AppError('Password confirmation is not a match', 400));
+  }
+
+  const email = await db.User.findOne({ where: { userEmail: req.body.userEmail } });
+  if (email) {
+    return next(new AppError('Email already exist', 400));
+  }
+
+  const name = await db.User.findOne({ where: { userName: req.body.userName } });
+  if (name) {
+    return next(new AppError('User name already exist', 400));
   }
 
   const newUser = await db.User.create({
